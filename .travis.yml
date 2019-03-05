@@ -1,39 +1,32 @@
 language: objective-c
 osx_image: xcode9.2
 rvm:
-- 2.2         #see before_install for getting RVM stable.
-
+- 2.2
 env:
-- TRAVIS_TAG="Deploy-2017.2.0f3" PROJECT_NAME="UnityExamplePackage" UNITY_PROJECT_PATH="UnityExample" DEPLOY_UNITYPACKAGE="path set in deploy script"
-
-
+- TRAVIS_TAG="Deploy-2017.2.0f3" PROJECT_NAME="UnityExamplePackage" UNITY_PROJECT_PATH="UnityExample"
+  DEPLOY_UNITYPACKAGE="path set in deploy script"
 cache:
   directories:
-    - $UNITY_DOWNLOAD_CACHE
-
-    
+  - "$UNITY_DOWNLOAD_CACHE"
 before_install:
 - chmod a+x ./travis-build/*.sh
-
 install:
 - cat /etc/hosts
-- ./travis-build/install-unity.sh
-
+- "./travis-build/install-unity.sh"
 script:
-- ./travis-build/build.sh
-- ./travis-build/run-tests.sh
-
+- "./travis-build/build.sh"
+- "./travis-build/run-tests.sh"
 after_success:
-- ./travis-build/export-unity-package.sh
-
+- "./travis-build/export-unity-package.sh"
 before_deploy:
 - DEPLOY_UNITYPACKAGE="$(ls -a release/*.zip | head -n 1)"
-
 deploy:
   provider: releases
-  api_key: $GITHUB_TOKEN
+  api_key: 
+    secure: ZEyVGrUHaXUkEjDBlQJ36k6QmeQlN/XphFX+N+GaSf9FvO7uRm9FZLBmZacaTqjtVQylTz0Wgck4FSYdxTUZr2IAtRbXJaCi8jSxZ1VCRbDrtrK0o7YrPz/dAGGwG9vHWeBM5tAnFPI5jfuLygsa3aye9L2YHB/9gQWZ1oioX1qR21rDPjohC/NMX0L+Lj1Ke4D7Wq8SPBEG8o6tx7t3CEAhT/P0zWGTJCjN5UesU/6sQwCcRgshPBtz2f//+E+ELvU2nuTglEHpgHXyOQfwjHpsKU4W+UY6RtdFbrg0LzzKxiIIdVWNv05/LNwT1K4rPYeHLSiw1my6vQi+wnWxbqWvD/OI80NFBJA5BRiz1C/pjnYDBLhQ5lURngxDz9Vn9TOBL7d2ERKP3UlqD5wIpOiMq5cE/X2/i1v6fUXtONze3HHqTfmSkY4HQb5saYcLInhtLDsxrOztEBlf/1sWv6YPxGUNe2AcZQecjcekc2sZP1Uxayi9JHKdeyC6mjYgEOI444bbdjd0LMruPhw6iYmrhustsVYZyr9fbGuYrg0Xtb4KPmtIC+Ez+JSmuFT0kkU1Ybxwlo+cMdlQILOy11BL2he1NVemMoXsxm3VymoFDpSwCaNBV9nN1NpNxuazwY0hbrH2rWA1RI7p8c5XE1EP4QYGRgPUhxlQXoGNpqY=
   file: $DEPLOY_UNITYPACKAGE
   skip_cleanup: true
   overwrite: true
   on:
+    repo: YunSeok-Kang/unity3d-travis-ci
     tags: true 
